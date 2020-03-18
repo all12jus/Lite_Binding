@@ -1,0 +1,139 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+		<title>SampleForm</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<script src="acorn_interpreter.js"></script>
+		<style>
+			.pre {
+				font-family: "Courier New", monospace;
+				white-space: pre;
+				display: block;
+				padding: 9.5px;
+				margin: 0 0 10px;
+				font-size: 13px;
+				line-height: 1.42857143;
+				color: #333;
+				word-break: break-all;
+				word-wrap: break-word;
+				background-color: #f5f5f5;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+			}
+
+			/* .btn-group-sm > .btn,
+			.btn-sm {
+				padding: 0.25rem 0.5rem;
+				font-size: 0.875rem;
+				line-height: 1.5;
+				border-radius: 0.2rem;
+			} */
+
+			.btn-group-xs > .btn,
+			.btn-xs {
+				padding: 0.2rem 0.4rem;
+				font-size: 1em;
+				line-height: 0.75;
+				border-radius: 0.2rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container-fluid">
+			<nav class="navbar navbar-light navbar-expand-md navigation-clean">
+				<div class="container">
+					<a class="navbar-brand" href="#">Sample</a>
+					<button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1">
+						<span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navcol-1">
+						<ul class="nav navbar-nav ml-auto"></ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+		<div class="container">
+			<form action="javascript:void(0);">
+				<div class="form-group">
+					<input class="form-control" type="text" data-model="value" />
+				</div>
+				<div class="form-group">
+					<button class="btn btn-primary" type="submit" data-action="items.push(value); value = '';">
+						Click Here
+					</button>
+				</div>
+			</form>
+			<!-- <p class="pre">{{ value }}</p> -->
+			<ul data-repeat="item in items">
+				<li>{{ item }}</li>
+			</ul>
+			<table class="table table-bordered table-condensed table-striped">
+				<thead>
+					<td style="width: 1ex;"></td>
+					<td>First</td>
+					<td>Last</td>
+					<td>Email</td>
+					<td style="width: 1.5em;"></td>
+					<!-- <td style="width: 21px;"></td> -->
+				</thead>
+				<tbody data-repeat="subscriber in subscribers">
+					<tr>
+						<td>
+							{{ index + 1 }}
+							<!-- {{ JSON.stringify(subscribers[index]) }} -->
+						</td>
+
+						<td>{{ subscriber.first }}</td>
+						<td>{{ subscriber.last }}</td>
+						<td>{{ subscriber.email }}</td>
+						<td>
+							<!-- this is broken removing first element -->
+							<button class="btn btn-xs btn-danger" type="button" data-action="subscribers.splice(subscribers.indexOf(subscriber), 1)">
+								DEL
+								<!-- {{ index }} -->
+							</button>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<form action="javascript:void(0);">
+						<td></td>
+						<td>
+							<input type="text" class="form-control" data-model="fname" placeholder="First Name" />
+						</td>
+						<td>
+							<input type="text" class="form-control" data-model="lname" placeholder="Last Name" />
+						</td>
+						<td>
+							<input type="email" class="form-control" data-model="email" placeholder="Email" />
+						</td>
+						<td>
+							<button
+								class="btn btn-sm btn-success"
+								type="button"
+								data-disabled="fname == '' || lname == '' || email == ''"
+								data-action="subscribers.push({first: fname, last: lname, email: email}); fname = ''; lname = ''; email = '';"
+							>
+								Add
+							</button>
+						</td>
+					</form>
+				</tfoot>
+			</table>
+			<!-- <p class="pre">{{ fname }} {{ lname }} {{ email }}</p> -->
+			<!-- <p data-if="items.length > 0">Items: {{ items.length }}</p> -->
+			<!-- <p data-if="items.count == 0">No Items</p> -->
+			<!-- <p data-if="items.count > 0">Item Count: {{ items.count }}</p> -->
+			<!-- <p class="pre">Length: {{ items.length }}</p> -->
+			<!-- <p class="pre">{{ JSON.stringify(items, null, 4) }}</p> -->
+			<p class="pre">{{ selected }}</p>
+		</div>
+		<script src="library.js"></script>
+		<script src="App.js"></script>
+		<!-- <script id="bs-live-reload" data-sseport="51522" data-lastchange="1584120544347" src="/js/livereload.js"></script> -->
+	</body>
+</html>
