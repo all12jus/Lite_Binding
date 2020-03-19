@@ -71,6 +71,8 @@
 			<ul data-repeat="item in items">
 				<li>{{ item }}</li>
 			</ul>
+
+			<!-- <p class="pre">{{ JSON.stringify(subscribers, null, 4) }}</p> -->
 			<table class="table table-bordered table-condensed table-striped">
 				<thead>
 					<td style="width: 1ex;"></td>
@@ -80,10 +82,13 @@
 					<td style="width: 1.5em;"></td>
 					<!-- <td style="width: 21px;"></td> -->
 				</thead>
+				<!-- this is broken removing first element -->
+				<!-- data-action="if(subscribers.indexOf(subscribers[index]) != -1 && subscribers.indexOf(subscribers[index]) == index) { subscribers.splice(subscribers.indexOf(subscribers[index]), 1) }" -->
+				<!-- Some how the subscriber and index isn't getting sent in -->
 				<tbody data-repeat="subscriber in subscribers">
 					<tr>
 						<td>
-							{{ index + 1 }}
+							{{ index }} = {{ subscribers.indexOf(subscribers[index]) }}
 							<!-- {{ JSON.stringify(subscribers[index]) }} -->
 						</td>
 
@@ -91,14 +96,33 @@
 						<td>{{ subscriber.last }}</td>
 						<td>{{ subscriber.email }}</td>
 						<td>
-							<!-- this is broken removing first element -->
-							<button class="btn btn-xs btn-danger" type="button" data-action="subscribers.splice(subscribers.indexOf(subscriber), 1)">
+							<button
+								class="btn btn-xs btn-danger"
+								type="button"
+								data-action="
+								alert(index);
+								alert(subscribers[index] == subscriber);
+								alert(JSON.stringify(subscriber));
+								subscribers.forEach(function(e){
+									alert(JSON.stringify(e));
+									if(JSON.stringify(e) == JSON.stringify(subscriber)){
+										subscribers.splice(index, 1);
+									}
+								})
+								
+							"
+							>
 								DEL
 								<!-- {{ index }} -->
 							</button>
 						</td>
+						<td><p class="pre">{{ JSON.stringify(subscribers[index] ) }}</p></td>
+						<td>
+							<p class="pre">{{ JSON.stringify(index == subscribers.indexOf(subscribers[index])) }}</p>
+						</td>
 					</tr>
 				</tbody>
+				<!-- <td><p class="pre">{{ JSON.stringify(subscribers[index]) }}</p></td> -->
 				<tfoot>
 					<form action="javascript:void(0);">
 						<td></td>

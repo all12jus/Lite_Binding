@@ -29,7 +29,6 @@ const initApp = () => {
 				inter.run();
 				hasNoError = true;
 			} catch (error) {
-				// console.error(error);
 				if (error instanceof ReferenceError) {
 					const len = " is not defined".length;
 					const variableName = error.message.substring(0, error.message.length - len);
@@ -38,6 +37,8 @@ const initApp = () => {
 				}
 				if (error instanceof SyntaxError) {
 					console.error("Syntax Error in:" + expression);
+					// console.error(error);
+					hasNoError = true;
 					return [];
 				}
 			}
@@ -48,6 +49,11 @@ const initApp = () => {
 			Object.keys(mergedScope).forEach((key) => {
 				interpreter.setProperty(scope, key, interpreter.nativeToPseudo(mergedScope[key]));
 			});
+
+			var wrapper = function(text) {
+				return console.warn(text);
+			};
+			interpreter.setProperty(scope, "alert", interpreter.createNativeFunction(wrapper));
 		});
 		// console.info(expression + " <-in-> " + JSON.stringify(Object.keys(limitedScope)));
 		return Object.keys(limitedScope);
@@ -127,6 +133,11 @@ const initApp = () => {
 			Object.keys(mergedScope).forEach((key) => {
 				interpreter.setProperty(scope, key, interpreter.nativeToPseudo(mergedScope[key]));
 			});
+
+			var wrapper = function(text) {
+				return console.warn(text);
+			};
+			interpreter.setProperty(scope, "alert", interpreter.createNativeFunction(wrapper));
 		});
 		try {
 			inter.run();
@@ -149,7 +160,7 @@ const initApp = () => {
 	const processAction = (expression, localScope = {}) => {
 		// console.warn(app.$scope);
 		var mergedScope = { ...app.$scope, ...localScope };
-		// console.log(mergedScope);
+		console.log(mergedScope);
 		var result = "{";
 		Object.keys(mergedScope).forEach((key) => {
 			result += `${key}:${key},`;
@@ -160,6 +171,11 @@ const initApp = () => {
 			Object.keys(mergedScope).forEach((key) => {
 				interpreter.setProperty(scope, key, interpreter.nativeToPseudo(mergedScope[key]));
 			});
+
+			var wrapper = function(text) {
+				return console.warn(text);
+			};
+			interpreter.setProperty(scope, "alert", interpreter.createNativeFunction(wrapper));
 		});
 		try {
 			inter.run();
@@ -171,18 +187,20 @@ const initApp = () => {
 				const variableName = error.message.substring(0, error.message.length - len);
 				console.warn(variableName);
 			}
+			throw error;
 		}
 		// console.log(inter);
 		// return inter.value;
 		// return inter;
-		var result = inter.pseudoToNative(inter.value);
+		var res = inter.pseudoToNative(inter.value);
 		// console.log(result);
 
-		Object.keys(result).forEach((k) => {
+		Object.keys(res).forEach((k) => {
 			// console.log(`${k} = ${result[k]}`);
-			app.update$Scope(k, result[k]);
+			app.update$Scope(k, res[k]);
 			app.render(k);
 		});
+		console.info(res);
 
 		return result;
 	};
@@ -201,8 +219,13 @@ const initApp = () => {
 		var values = processExpression(expression);
 		// console.warn(values);
 		var template = parent.dataset.template;
+		parent.innerHTML = "";
 		var output = "";
 		values.forEach((value, index) => {
+			var div = document.createElement("table");
+			// var parser = new DOMParser();
+			// var doc = parser.parseFromString(str, "text/html");
+			// return doc.body;
 			var temp = template;
 			var matches = temp.match(EXPRESSION_REGEX).map((e) => {
 				return { regex: e, expression: e.substring(2, e.length - 2).trim() };
@@ -216,8 +239,19 @@ const initApp = () => {
 				span.innerText = val;
 				temp = temp.replace(match.regex, span.outerHTML);
 			});
+			// div.innerHTML = temp;
+			// var element = parser.parseFromString(temp, "text/html");
 			// console.log(temp);
-			output += temp;
+			div.innerHTML = temp;
+			div.querySelectorAll("[data-action]").forEach((elm) => {
+				elm.dataset.local = JSON.stringify(inject);
+			});
+			// output += div.getElementsByTagName("tbody").innerHTML;
+			output += div.innerHTML;
+			// parent.appendChild(div.innerHTML);
+			// div.setAttribute("data-local", JSON.stringify(inject));
+			// console.info(element);
+			// parent.append(element.body.innerHTML);
 		});
 		// console.log(output);
 		parent.innerHTML = output;
@@ -226,13 +260,15 @@ const initApp = () => {
 		parent.querySelectorAll("[data-action]").forEach((elm) => {
 			const expression = elm.dataset.action;
 			// console.warn(expression);
-			const variables = getVariablesFromExpressionList([expression]);
+			// const variables = getVariablesFromExpressionList([expression]);
 			// console.info(variables);
 			elm.addEventListener("click", () => {
 				// console.info(variables);
 				elm.disabled = true;
 				// alert(`${variables}`);
-				var result = processAction(expression);
+				var local = JSON.parse(elm.dataset.local);
+				console.warn(local);
+				var result = processAction(expression, local);
 				// alert(JSON.stringify(result));
 				// alert(`${elm.dataset.action} ==> ${result}`);
 				console.log(result);

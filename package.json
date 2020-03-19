@@ -1,0 +1,19 @@
+{
+  "name": "lite_binding",
+  "version": "1.0.0",
+  "description": "",
+  "main": "App.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/all12jus/Lite_Binding.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/all12jus/Lite_Binding/issues"
+  },
+  "homepage": "https://github.com/all12jus/Lite_Binding#readme"
+}
