@@ -87,9 +87,8 @@
 				<tbody data-repeat="subscriber in subscribers">
 					<tr>
 						<td>
-							{{ index }}
+							{{ index + 1 }}
 						</td>
-
 						<td>{{ subscriber.first }}</td>
 						<td>{{ subscriber.last }}</td>
 						<td>{{ subscriber.email }}</td>
@@ -104,7 +103,6 @@
 							"
 							>
 								DEL
-								<!-- {{ index }} -->
 							</button>
 						</td>
 					</tr>
@@ -135,13 +133,6 @@
 					</form>
 				</tfoot>
 			</table>
-			<!-- <p class="pre">{{ fname }} {{ lname }} {{ email }}</p> -->
-			<!-- <p data-if="items.length > 0">Items: {{ items.length }}</p> -->
-			<!-- <p data-if="items.count == 0">No Items</p> -->
-			<!-- <p data-if="items.count > 0">Item Count: {{ items.count }}</p> -->
-			<!-- <p class="pre">Length: {{ items.length }}</p> -->
-			<!-- <p class="pre">{{ JSON.stringify(items, null, 4) }}</p> -->
-			<p class="pre">{{ selected }}</p>
 		</div>
 		<script src="library.js"></script>
 		<script src="App.js"></script>
