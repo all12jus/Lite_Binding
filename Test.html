@@ -83,13 +83,11 @@
 					<!-- <td style="width: 21px;"></td> -->
 				</thead>
 				<!-- this is broken removing first element -->
-				<!-- data-action="if(subscribers.indexOf(subscribers[index]) != -1 && subscribers.indexOf(subscribers[index]) == index) { subscribers.splice(subscribers.indexOf(subscribers[index]), 1) }" -->
 				<!-- Some how the subscriber and index isn't getting sent in -->
 				<tbody data-repeat="subscriber in subscribers">
 					<tr>
 						<td>
-							{{ index }} = {{ subscribers.indexOf(subscribers[index]) }}
-							<!-- {{ JSON.stringify(subscribers[index]) }} -->
+							{{ index }}
 						</td>
 
 						<td>{{ subscriber.first }}</td>
@@ -100,25 +98,14 @@
 								class="btn btn-xs btn-danger"
 								type="button"
 								data-action="
-								alert(index);
-								alert(subscribers[index] == subscriber);
-								alert(JSON.stringify(subscriber));
-								subscribers.forEach(function(e){
-									alert(JSON.stringify(e));
-									if(JSON.stringify(e) == JSON.stringify(subscriber)){
-										subscribers.splice(index, 1);
-									}
-								})
-								
+								if(JSON.stringify(subscribers[index]) == JSON.stringify(subscriber)){
+									subscribers.splice(index, 1);
+								}
 							"
 							>
 								DEL
 								<!-- {{ index }} -->
 							</button>
-						</td>
-						<td><p class="pre">{{ JSON.stringify(subscribers[index] ) }}</p></td>
-						<td>
-							<p class="pre">{{ JSON.stringify(index == subscribers.indexOf(subscribers[index])) }}</p>
 						</td>
 					</tr>
 				</tbody>
